@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import java.net.URI
 
 plugins {
+    id("com.github.johnrengelman.shadow").version("6.0.0")
     java
     kotlin("jvm") version "1.3.72"
     idea
@@ -9,6 +10,7 @@ plugins {
 
 group = "com.auroratide"
 version = "1.0-SNAPSHOT"
+val artifactName = "${project.name}-$version-all"
 
 tasks {
     withType<Test> {
@@ -35,9 +37,13 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
 }
 
+tasks.named("shadowJar") {
+    dependsOn("check")
+}
+
 tasks.register<Copy>("stageJar") {
-    dependsOn("build")
-    from("build/libs")
+    dependsOn("shadowJar")
+    from("build/libs/$artifactName.jar")
     into("spigot/plugins")
 }
 
