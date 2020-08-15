@@ -34,3 +34,16 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
 }
+
+tasks.register<Copy>("stageJar") {
+    dependsOn("build")
+    from("build/libs")
+    into("spigot/plugins")
+}
+
+// NOTE: Requires a spigot server already built in the spigot folder
+tasks.register<Exec>("run") {
+    dependsOn("stageJar")
+    workingDir = file("spigot")
+    commandLine = listOf("java", "-Xms1G", "-Xmx1G", "-XX:+UseConcMarkSweepGC", "-jar", "spigot-1.16.1.jar", "nogui")
+}
