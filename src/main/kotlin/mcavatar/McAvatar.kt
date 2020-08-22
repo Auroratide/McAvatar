@@ -12,7 +12,7 @@ class McAvatar : JavaPlugin() {
         server.pluginManager.registerEvents(PacketListener {
             read<PacketPlayInBlockDig> {
                 if (digType() == EnumPlayerDigType.ABORT_DESTROY_BLOCK) {
-                    logger.info("Player has stopped destroying a block!")
+                    logger.info("${it.name} has stopped destroying a block!")
                 }
             }
         }, this)
