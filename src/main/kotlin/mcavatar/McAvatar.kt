@@ -10,7 +10,7 @@ class McAvatar : JavaPlugin() {
         logger.info("onEnable is called!")
         server.pluginManager.registerEvents(SomeListener(), this)
         server.pluginManager.registerEvents(PacketListener {
-            read<PacketPlayInBlockDig> {
+            inbound<PacketPlayInBlockDig> {
                 if (digType() == EnumPlayerDigType.ABORT_DESTROY_BLOCK) {
                     logger.info("${it.name} has stopped destroying a block!")
                 }

@@ -11,8 +11,8 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
 class PacketListener(config: Interceptors.() -> Unit) : Listener {
-    val readInterceptors = mutableListOf<Any.(Player) -> Unit>()
-    val writeInterceptors = mutableListOf<Any.(Player) -> Unit>()
+    val inbound = mutableListOf<Any.(Player) -> Unit>()
+    val outbound = mutableListOf<Any.(Player) -> Unit>()
 
     init {
         Interceptors().config()
@@ -22,12 +22,12 @@ class PacketListener(config: Interceptors.() -> Unit) : Listener {
         val pipeline = (e.player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()
         pipeline.addBefore("packet_handler", e.player.name, object : ChannelDuplexHandler() {
             override fun channelRead(context: ChannelHandlerContext, packet: Any) {
-                readInterceptors.forEach { packet.it(e.player) }
+                inbound.forEach { packet.it(e.player) }
                 super.channelRead(context, packet)
             }
 
             override fun write(context: ChannelHandlerContext, packet: Any, promise: ChannelPromise) {
-                writeInterceptors.forEach { packet.it(e.player) }
+                outbound.forEach { packet.it(e.player) }
                 super.write(context, packet, promise)
             }
         })
@@ -41,14 +41,14 @@ class PacketListener(config: Interceptors.() -> Unit) : Listener {
     }
 
     inner class Interceptors {
-        inline fun <reified T> read(crossinline action: T.(Player) -> Unit) {
-            readInterceptors.add {
+        inline fun <reified T> inbound(crossinline action: T.(Player) -> Unit) {
+            inbound.add {
                 if (this is T) action(it)
             }
         }
 
-        inline fun <reified T> write(crossinline action: T.(Player) -> Unit) {
-            writeInterceptors.add {
+        inline fun <reified T> outbound(crossinline action: T.(Player) -> Unit) {
+            outbound.add {
                 if (this is T) action(it)
             }
         }
