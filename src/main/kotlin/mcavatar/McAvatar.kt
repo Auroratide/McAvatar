@@ -8,7 +8,9 @@ import org.bukkit.plugin.java.JavaPlugin
 class McAvatar : JavaPlugin() {
     override fun onEnable() {
         logger.info("onEnable is called!")
-        server.pluginManager.registerEvents(SomeListener(), this)
+        val scheduler = Scheduler(this, server.scheduler)
+//        server.pluginManager.registerEvents(SomeListener(), this)
+        server.pluginManager.registerEvents(DigListener(scheduler), this)
         server.pluginManager.registerEvents(PacketListener {
             inbound<PacketPlayInBlockDig> {
                 if (digType() == EnumPlayerDigType.ABORT_DESTROY_BLOCK) {
