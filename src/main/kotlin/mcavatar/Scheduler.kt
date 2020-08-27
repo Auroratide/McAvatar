@@ -12,4 +12,12 @@ fun Duration.toTicks() = toMillis() / MILLIS_IN_TICK
 class Scheduler(private val plugin: Plugin, private val scheduler: BukkitScheduler) {
     fun runAfter(duration: Duration, task: () -> Unit) =
         scheduler.runTaskLater(plugin, task, duration.toTicks())
+
+    fun onEachTickFor(duration: Duration, task: () -> Unit) {
+        scheduler.scheduleSyncRepeatingTask(plugin, task, 0, 1).also { taskId ->
+            runAfter(duration) {
+                scheduler.cancelTask(taskId)
+            }
+        }
+    }
 }

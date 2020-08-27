@@ -1,8 +1,6 @@
 package mcavatar
 
-import mcavatar.minecraft.EnumPlayerDigType
-import mcavatar.minecraft.PacketPlayInBlockDig
-import mcavatar.minecraft.digType
+import mcavatar.minecraft.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -15,6 +13,12 @@ class DigListener(private val scheduler: Scheduler) : Listener {
     @EventHandler fun startDig(e: BlockDamageEvent) {
         breakTasks[e.player] = scheduler.runAfter(10.ticks) {
             e.block.breakNaturally()
+        }
+
+        // TODO needs to be cancellable
+        var i = 0
+        scheduler.onEachTickFor(10.ticks) {
+            PacketSender().send(e.player, Packet.BlockBreakAnimation(e.player, e.block, Breakage(i++)))
         }
     }
 
