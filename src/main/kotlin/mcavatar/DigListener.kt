@@ -1,6 +1,7 @@
 package mcavatar
 
 import mcavatar.minecraft.*
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -11,14 +12,16 @@ class DigListener(private val scheduler: Scheduler) : Listener {
     private val breakTasks = mutableMapOf<Player, BukkitTask>()
 
     @EventHandler fun startDig(e: BlockDamageEvent) {
-        breakTasks[e.player] = scheduler.runAfter(10.ticks) {
-            e.block.breakNaturally()
-        }
+        if (e.block.properties().contains(earthy)) {
+            breakTasks[e.player] = scheduler.runAfter(10.ticks) {
+                e.block.breakNaturally()
+            }
 
-        // TODO needs to be cancellable
-        var i = 0
-        scheduler.onEachTickFor(10.ticks) {
-            PacketSender().send(e.player, Packet.BlockBreakAnimation(e.player, e.block, Breakage(i++)))
+            // TODO needs to be cancellable
+            var i = 0
+            scheduler.onEachTickFor(10.ticks) {
+                PacketSender().send(e.player, Packet.BlockBreakAnimation(e.player, e.block, Breakage(i++)))
+            }
         }
     }
 

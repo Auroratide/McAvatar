@@ -1,3 +1,4 @@
 name: McAvatar
 version: 1.0
 main: mcavatar.McAvatar
+api-version: 1.16
