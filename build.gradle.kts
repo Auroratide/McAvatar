@@ -4,7 +4,7 @@ import java.net.URI
 plugins {
     id("com.github.johnrengelman.shadow").version("6.0.0")
     java
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.4.0"
     idea
 }
 
