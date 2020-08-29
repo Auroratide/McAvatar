@@ -2,14 +2,16 @@ package mcavatar.earth
 
 import mcavatar.*
 import mcavatar.minecraft.*
+import mcavatar.scheduler.Scheduler
+import mcavatar.scheduler.Task
+import mcavatar.scheduler.ticks
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDamageEvent
-import org.bukkit.scheduler.BukkitTask
 
 class DigListener(private val scheduler: Scheduler) : Listener {
-    private val breakTasks = mutableMapOf<Player, BukkitTask>()
+    private val breakTasks = mutableMapOf<Player, Task>()
 
     @EventHandler fun startDig(e: BlockDamageEvent) {
         if (e.block.properties().contains(earthy)) {

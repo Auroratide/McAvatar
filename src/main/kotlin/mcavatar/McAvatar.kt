@@ -1,6 +1,7 @@
 package mcavatar
 
 import mcavatar.earth.DigListener
+import mcavatar.scheduler.Scheduler
 import org.bukkit.plugin.java.JavaPlugin
 
 class McAvatar : JavaPlugin() {
