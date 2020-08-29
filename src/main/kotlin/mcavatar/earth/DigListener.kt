@@ -17,12 +17,8 @@ class DigListener(private val scheduler: Scheduler) : Listener {
         if (e.block.properties().contains(earthy)) {
             breakTasks[e.player] = scheduler.runAfter(10.ticks) {
                 e.block.breakNaturally()
-            }
-
-            // TODO needs to be cancellable
-            var i = 0
-            scheduler.onEachTickFor(10.ticks) {
-                PacketSender().send(e.player, Packet.BlockBreakAnimation(e.player, e.block, Breakage(i++)))
+            } + scheduler.onEachTickFor(10.ticks) {
+                PacketSender().send(e.player, Packet.BlockBreakAnimation(e.player, e.block, Breakage(it)))
             }
         }
     }
