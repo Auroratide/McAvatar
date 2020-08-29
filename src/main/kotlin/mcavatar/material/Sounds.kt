@@ -1,6 +1,6 @@
 package mcavatar.material
 
-import org.bukkit.Bukkit
+import mcavatar.logger
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -18,7 +18,7 @@ fun Block.playSound(getSound: BlockSounds.() -> Sound?) {
     if (sound != null) {
         world.playSound(location, sound, 1.0f, 1.0f)
     } else {
-        Bukkit.getLogger().warning("Attempted sound for $type, but no sounds were found. Actual block: $this")
+        logger().warning("Attempted sound for $type, but no sounds were found. Actual block: $this")
     }
 }
 
