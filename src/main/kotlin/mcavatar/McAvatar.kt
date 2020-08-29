@@ -1,5 +1,6 @@
 package mcavatar
 
+import mcavatar.earth.DigListener
 import org.bukkit.plugin.java.JavaPlugin
 
 class McAvatar : JavaPlugin() {
