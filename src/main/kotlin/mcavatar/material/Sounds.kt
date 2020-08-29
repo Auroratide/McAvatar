@@ -1,4 +1,4 @@
-package mcavatar.block
+package mcavatar.material
 
 import org.bukkit.Bukkit
 import org.bukkit.Material
