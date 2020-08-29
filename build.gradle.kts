@@ -37,6 +37,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.22")
 }
 
 tasks.named("shadowJar") {

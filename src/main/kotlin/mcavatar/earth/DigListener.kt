@@ -2,6 +2,7 @@ package mcavatar.earth
 
 import mcavatar.*
 import mcavatar.material.*
+import mcavatar.math.Ratio
 import mcavatar.minecraft.*
 import mcavatar.scheduler.*
 import org.bukkit.Bukkit
@@ -22,7 +23,7 @@ class DigListener(private val scheduler: Scheduler) : Listener {
                 e.block.playSound { broken }
                 e.block.breakNaturally()
             } + scheduler.onEachTickFor(e.block.timeToBreak) {
-                PacketSender().send(e.player, Packet.BlockBreakAnimation(e.player, e.block, Breakage(it)))
+                PacketSender().send(e.player, Packet.BlockBreakAnimation(e.player, e.block, Breakage.from(Ratio(it, e.block.timeToBreak.toTicks().toInt()))))
             }
         }
     }
