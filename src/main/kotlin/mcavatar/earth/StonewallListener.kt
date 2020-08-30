@@ -11,7 +11,7 @@ import org.bukkit.event.block.BlockDamageEvent
 
 class StonewallListener : Listener {
     @EventHandler fun placeWall(e: BlockDamageEvent) {
-        if (e.itemInHand.properties().has<axe>()) {
+        if (e.itemInHand.properties().has<axe>() && e.player.attackCooldown >= 1.0f) {
             e.block.world.getBlockAt(e.block.getRelative(BlockFace.UP).location).type = Material.COBBLESTONE
         }
     }
