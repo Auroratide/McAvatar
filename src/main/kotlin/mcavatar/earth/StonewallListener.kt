@@ -8,6 +8,9 @@ import org.bukkit.block.BlockFace
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDamageEvent
+import org.bukkit.inventory.ItemStack
+
+private typealias ItemInInventory = Map<Int, ItemStack>
 
 class StonewallListener : Listener {
     @EventHandler fun placeWall(e: BlockDamageEvent) {
@@ -17,11 +20,20 @@ class StonewallListener : Listener {
             val down = BlockFace.DOWN
             val chain = listOf(up, up, up, left, down, down, left, up, up)
 
+            val cobblestone: ItemInInventory = e.player.inventory.all(Material.COBBLESTONE)
+
             chain.fold(e.block.getRelative(left.oppositeFace)) { block, dir ->
                 block.getRelative(dir).also {
                     it.type = Material.COBBLESTONE
+                    cobblestone.removeOne()
                 }
             }
+        }
+    }
+
+    private fun ItemInInventory.removeOne() {
+        values.find { it.amount > 0 }?.let {
+            --it.amount
         }
     }
 
