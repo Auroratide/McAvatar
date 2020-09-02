@@ -12,27 +12,16 @@ import org.bukkit.event.block.BlockDamageEvent
 class StonewallListener : Listener {
     @EventHandler fun placeWall(e: BlockDamageEvent) {
         if (e.itemInHand.properties().has<axe>() && e.player.attackCooldown >= 1.0f) {
-            val dir = e.player.facing.perpendicular()
+            val left = e.player.facing.perpendicular()
+            val up = BlockFace.UP
+            val down = BlockFace.DOWN
+            val chain = listOf(up, up, up, left, down, down, left, up, up)
 
-            val up = e.block.getRelative(BlockFace.UP)
-            val upup = up.getRelative(BlockFace.UP)
-            val upupup = upup.getRelative(BlockFace.UP)
-            val r = up.getRelative(dir)
-            val rr = upup.getRelative(dir)
-            val rrr = upupup.getRelative(dir)
-            val l = up.getRelative(dir.oppositeFace)
-            val ll = upup.getRelative(dir.oppositeFace)
-            val lll = upupup.getRelative(dir.oppositeFace)
-
-            up.type = Material.COBBLESTONE
-            upup.type = Material.COBBLESTONE
-            upupup.type = Material.COBBLESTONE
-            r.type = Material.COBBLESTONE
-            rr.type = Material.COBBLESTONE
-            rrr.type = Material.COBBLESTONE
-            l.type = Material.COBBLESTONE
-            ll.type = Material.COBBLESTONE
-            lll.type = Material.COBBLESTONE
+            chain.fold(e.block.getRelative(left.oppositeFace)) { block, dir ->
+                block.getRelative(dir).also {
+                    it.type = Material.COBBLESTONE
+                }
+            }
         }
     }
 
