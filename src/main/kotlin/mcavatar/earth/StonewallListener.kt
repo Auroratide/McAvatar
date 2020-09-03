@@ -24,8 +24,10 @@ class StonewallListener : Listener {
 
             chain.fold(e.block.getRelative(left.oppositeFace)) { block, dir ->
                 block.getRelative(dir).also {
-                    it.type = Material.COBBLESTONE
-                    cobblestone.removeOne()
+                    if (!it.type.isSolid) {
+                        it.type = Material.COBBLESTONE
+                        cobblestone.removeOne()
+                    }
                 }
             }
         }
