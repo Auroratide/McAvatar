@@ -9,13 +9,14 @@ import org.bukkit.block.Block
 // https://www.spigotmc.org/threads/play-correct-break-sound-for-a-block-1-14.402215/
 
 data class BlockSounds(
-    val broken: Sound?
+    val broken: Sound?,
+    val placed: Sound?
 )
 
-private val grassSounds = BlockSounds(broken = Sound.BLOCK_GRASS_BREAK)
-private val gravelSounds = BlockSounds(broken = Sound.BLOCK_GRAVEL_BREAK)
-private val sandSounds = BlockSounds(broken = Sound.BLOCK_SAND_BREAK)
-private val stoneSounds = BlockSounds(broken = Sound.BLOCK_STONE_BREAK)
+private val grassSounds = BlockSounds(broken = Sound.BLOCK_GRASS_BREAK, placed = Sound.BLOCK_GRASS_PLACE)
+private val gravelSounds = BlockSounds(broken = Sound.BLOCK_GRAVEL_BREAK, placed = Sound.BLOCK_GRAVEL_PLACE)
+private val sandSounds = BlockSounds(broken = Sound.BLOCK_SAND_BREAK, placed = Sound.BLOCK_SAND_PLACE)
+private val stoneSounds = BlockSounds(broken = Sound.BLOCK_STONE_BREAK, placed = Sound.BLOCK_STONE_PLACE)
 
 private val sounds: Map<Material, BlockSounds> = mapOf(
     Material.DIRT to gravelSounds,
@@ -120,4 +121,4 @@ fun Block.playSound(getSound: BlockSounds.() -> Sound?) {
     }
 }
 
-fun Block.sounds() = sounds[type] ?: BlockSounds(broken = null)
+fun Block.sounds() = sounds[type] ?: BlockSounds(broken = null, placed = null)

@@ -2,8 +2,10 @@ package mcavatar.earth
 
 import mcavatar.material.axe
 import mcavatar.material.has
+import mcavatar.material.playSound
 import mcavatar.material.properties
 import org.bukkit.Material
+import org.bukkit.Particle
 import org.bukkit.block.BlockFace
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -26,6 +28,8 @@ class StonewallListener : Listener {
                 block.getRelative(dir).also {
                     if (!it.type.isSolid) {
                         it.type = Material.COBBLESTONE
+                        it.playSound { placed }
+                        e.player.world.spawnParticle(Particle.BLOCK_DUST, it.location, 10, it.blockData)
                         cobblestone.removeOne()
                     }
                 }
