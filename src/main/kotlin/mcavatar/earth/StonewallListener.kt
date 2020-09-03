@@ -16,7 +16,7 @@ private typealias ItemInInventory = Map<Int, ItemStack>
 
 class StonewallListener : Listener {
     @EventHandler fun placeWall(e: BlockDamageEvent) {
-        if (e.itemInHand.properties().has<axe>() && e.player.attackCooldown >= 1.0f) {
+        if (e.itemInHand.properties().has<axe>() && e.player.attackCooldown >= 0.9f) {
             val left = e.player.facing.perpendicular()
             val up = BlockFace.UP
             val down = BlockFace.DOWN
