@@ -6,6 +6,7 @@ import mcavatar.material.playSound
 import mcavatar.material.properties
 import org.bukkit.Material
 import org.bukkit.Particle
+import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -18,23 +19,33 @@ class StonewallListener : Listener {
     @EventHandler fun placeWall(e: BlockDamageEvent) {
         if (e.itemInHand.properties().has<axe>() && e.player.attackCooldown >= 0.9f) {
             val left = e.player.facing.perpendicular()
-            val up = BlockFace.UP
-            val down = BlockFace.DOWN
-            val chain = listOf(up, up, up, left, down, down, left, up, up)
+            val wall = wall(e.block, left)
 
             val cobblestone: ItemInInventory = e.player.inventory.all(Material.COBBLESTONE)
 
-            chain.fold(e.block.getRelative(left.oppositeFace)) { block, dir ->
-                block.getRelative(dir).also {
-                    if (!it.type.isSolid) {
-                        it.type = Material.COBBLESTONE
-                        it.playSound { placed }
-                        e.player.world.spawnParticle(Particle.BLOCK_DUST, it.location, 10, it.blockData)
-                        cobblestone.removeOne()
-                    }
+            wall.forEach {
+                if (!it.type.isSolid) {
+                    it.type = Material.COBBLESTONE
+                    it.playSound { placed }
+                    e.player.world.spawnParticle(Particle.BLOCK_DUST, it.location, 10, it.blockData)
+                    cobblestone.removeOne()
                 }
             }
         }
+    }
+
+    private fun wall(origin: Block, left: BlockFace): List<Block> {
+        val u = origin.getRelative(BlockFace.UP)
+        val ul = u.getRelative(left)
+        val ur = u.getRelative(left.oppositeFace)
+        val uu = u.getRelative(BlockFace.UP)
+        val uul = uu.getRelative(left)
+        val uur = uu.getRelative(left.oppositeFace)
+        val uuu = uu.getRelative(BlockFace.UP)
+        val uuul = uuu.getRelative(left)
+        val uuur = uuu.getRelative(left.oppositeFace)
+
+        return listOf(u, ul, ur, uu, uul, uur, uuu, uuul, uuur)
     }
 
     private fun ItemInInventory.removeOne() {
