@@ -7,7 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class McAvatar : JavaPlugin() {
     override fun onEnable() {
-        logger.info("onEnable is called!")
+        logger.info("McAvatar enabled")
+
         val scheduler = Scheduler(this, server.scheduler)
         val burrow = Burrow.Listener(scheduler)
         val stonewall = Stonewall.Listener()
@@ -20,6 +21,6 @@ class McAvatar : JavaPlugin() {
     }
 
     override fun onDisable() {
-        logger.info("onDisable is called!")
+        logger.info("McAvatar disabled")
     }
 }
