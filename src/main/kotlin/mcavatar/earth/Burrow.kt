@@ -1,6 +1,7 @@
 package mcavatar.earth
 
 import mcavatar.*
+import mcavatar.bukkit.block.showBreakage
 import mcavatar.bukkit.material.*
 import mcavatar.math.Ratio
 import mcavatar.minecraft.*
@@ -21,7 +22,7 @@ class Burrow(private val scheduler: Scheduler, private val player: Player, priva
             block.playSound { broken }
             block.breakNaturally()
         } + scheduler.onEachTickFor(timeToBreak) {
-            PacketSender().send(player, Packet.BlockBreakAnimation(player, block, Breakage.from(Ratio(it, timeToBreak.toTicks().toInt()))))
+            block.showBreakage(Ratio(it, timeToBreak.toTicks().toInt()), player)
         }
     }
 

@@ -7,6 +7,7 @@ import mcavatar.bukkit.material.axe
 import mcavatar.bukkit.material.has
 import mcavatar.bukkit.material.playSound
 import mcavatar.bukkit.material.properties
+import mcavatar.bukkit.titles.actionBar
 import mcavatar.minecraft.EnumTitleAction
 import mcavatar.minecraft.Packet
 import mcavatar.minecraft.Title
@@ -29,20 +30,17 @@ class Stonewall(private val player: Player, private val block: Block) {
 
     fun execute() {
         when {
-            block.getRelative(BlockFace.UP).type.isSolid -> {
-                PacketSender().send(player, Packet.Title(EnumTitleAction.ACTIONBAR, chatText("Must use on ground!"), 1, 20, 1))
-            }
-            cobblestone.count() == 0 -> {
-                PacketSender().send(player, Packet.Title(EnumTitleAction.ACTIONBAR, chatText("Not enough blocks!"), 1, 20, 1))
-            }
-            else -> {
+            block.getRelative(BlockFace.UP).type.isSolid ->
+                player.actionBar.warn("Must use on ground!")
+            cobblestone.count() == 0 ->
+                player.actionBar.warn("Not enough blocks!")
+            else ->
                 wall().forEach {
                     if (canCobblify(it)) {
                         cobblify(it)
                         cobblestone.removeOne()
                     }
                 }
-            }
         }
     }
 
