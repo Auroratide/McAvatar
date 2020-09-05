@@ -11,6 +11,7 @@ import mcavatar.minecraft.EnumTitleAction
 import mcavatar.minecraft.Packet
 import mcavatar.minecraft.Title
 import mcavatar.minecraft.chatText
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.block.Block
@@ -20,6 +21,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.inventory.ItemStack
+import kotlin.random.Random
 
 class Stonewall(private val player: Player, private val block: Block) {
     private val left = player.facing.perpendicular()
@@ -59,7 +61,10 @@ class Stonewall(private val player: Player, private val block: Block) {
     private fun cobblify(block: Block) {
         block.type = Material.COBBLESTONE
         block.playSound { placed }
-        block.world.spawnParticle(Particle.BLOCK_DUST, block.location, 10, block.blockData)
+        repeat(10) {
+            val location = Location(block.world, block.location.x + Random.nextDouble(0.0, 1.0), block.location.y + Random.nextDouble(0.0, 1.0), block.location.z + Random.nextDouble(0.0, 1.0))
+            block.world.spawnParticle(Particle.BLOCK_DUST, location, 1, block.blockData)
+        }
     }
 
     private fun wall(): List<Block> {
