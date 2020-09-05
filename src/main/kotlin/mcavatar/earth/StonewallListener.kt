@@ -1,5 +1,6 @@
 package mcavatar.earth
 
+import mcavatar.logger
 import mcavatar.material.axe
 import mcavatar.material.has
 import mcavatar.material.playSound
@@ -23,13 +24,20 @@ class StonewallListener : Listener {
 
             val cobblestone: ItemInInventory = e.player.inventory.all(Material.COBBLESTONE)
 
+            var allBlocksPlaced = true
             wall.forEach {
-                if (!it.type.isSolid) {
+                if (!it.type.isSolid && cobblestone.count() > 0) {
                     it.type = Material.COBBLESTONE
                     it.playSound { placed }
                     e.player.world.spawnParticle(Particle.BLOCK_DUST, it.location, 10, it.blockData)
                     cobblestone.removeOne()
+                } else {
+                    allBlocksPlaced = false
                 }
+            }
+
+            if (!allBlocksPlaced) {
+                logger().warning("Not enough blocks to place wall")
             }
         }
     }
@@ -47,6 +55,9 @@ class StonewallListener : Listener {
 
         return listOf(u, ul, ur, uu, uul, uur, uuu, uuul, uuur)
     }
+
+    private fun ItemInInventory.count() =
+        values.sumBy { it.amount }
 
     private fun ItemInInventory.removeOne() {
         values.find { it.amount > 0 }?.let {
