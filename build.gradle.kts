@@ -1,11 +1,19 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import java.net.URI
+import org.bukkit.buildtools.BuildToolsPlugin
+import org.bukkit.buildtools.buildTools
 
 plugins {
     id("com.github.johnrengelman.shadow").version("6.0.0")
     java
     kotlin("jvm") version "1.4.0"
     idea
+}
+
+apply<BuildToolsPlugin>()
+
+buildTools {
+    minecraftVersion = "1.16.2"
 }
 
 group = "com.auroratide"
@@ -47,12 +55,9 @@ tasks.named("shadowJar") {
 tasks.register<Copy>("stageJar") {
     dependsOn("shadowJar")
     from("build/libs/$artifactName.jar")
-    into("spigot/plugins")
+    into("${buildTools.location}/plugins")
 }
 
-// NOTE: Requires a spigot server already built in the spigot folder
-tasks.register<Exec>("run") {
+tasks.named("spigotRun") {
     dependsOn("stageJar")
-    workingDir = file("spigot")
-    commandLine = listOf("java", "-Xms1G", "-Xmx1G", "-XX:+UseConcMarkSweepGC", "-jar", "spigot-1.16.2.jar", "nogui")
 }
