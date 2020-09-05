@@ -26,13 +26,19 @@ class Stonewall(private val player: Player, private val block: Block) {
     private val cobblestone = player.inventory.item(Material.COBBLESTONE)
 
     fun execute() {
-        if (cobblestone.count() == 0) {
-            PacketSender().send(player, Packet.Title(EnumTitleAction.ACTIONBAR, chatText("Not enough blocks!"), 1, 20, 1))
-        } else {
-            wall().forEach {
-                if (canCobblify(it)) {
-                    cobblify(it)
-                    cobblestone.removeOne()
+        when {
+            block.getRelative(BlockFace.UP).type.isSolid -> {
+                PacketSender().send(player, Packet.Title(EnumTitleAction.ACTIONBAR, chatText("Must use on ground!"), 1, 20, 1))
+            }
+            cobblestone.count() == 0 -> {
+                PacketSender().send(player, Packet.Title(EnumTitleAction.ACTIONBAR, chatText("Not enough blocks!"), 1, 20, 1))
+            }
+            else -> {
+                wall().forEach {
+                    if (canCobblify(it)) {
+                        cobblify(it)
+                        cobblestone.removeOne()
+                    }
                 }
             }
         }
