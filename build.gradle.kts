@@ -39,9 +39,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-//    implementation("org.spigotmc:spigot:1.16.2-R0.1-SNAPSHOT")
-    // Needed for packet stuff; TODO Figure out how to make this better
-    implementation(files("spigot/spigot-1.16.2.jar"))
+    implementation(buildTools.spigotServer)
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")

@@ -7,6 +7,8 @@ open class BuildToolsExtension(private val project: Project) {
     var minecraftVersion: String? = null
     var location: String = "spigot"
     var maxMem: String = "1G"
+
+    val spigotServer get() = project.files("$location/spigot-$minecraftVersion.jar")
 }
 
 val Project.buildTools get() = the<BuildToolsExtension>()
