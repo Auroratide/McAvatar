@@ -14,7 +14,7 @@ import org.bukkit.event.block.BlockDamageEvent
 import java.lang.Float.max
 
 class Burrow(private val scheduler: Scheduler, private val player: Player, private val block: Block) {
-    private val timeToBreak = 4.ticks * max(block.type.hardness, 1.0f)
+    private val timeToBreak = 4.ticks * max(block.type.hardness, 0.75f)
     lateinit var task: Task
 
     fun execute() {
