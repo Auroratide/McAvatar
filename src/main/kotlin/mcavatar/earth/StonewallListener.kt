@@ -1,10 +1,15 @@
 package mcavatar.earth
 
+import mcavatar.PacketSender
 import mcavatar.logger
 import mcavatar.material.axe
 import mcavatar.material.has
 import mcavatar.material.playSound
 import mcavatar.material.properties
+import mcavatar.minecraft.EnumTitleAction
+import mcavatar.minecraft.Packet
+import mcavatar.minecraft.Title
+import mcavatar.minecraft.chatText
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.block.Block
@@ -37,7 +42,7 @@ class StonewallListener : Listener {
             }
 
             if (!allBlocksPlaced) {
-                logger().warning("Not enough blocks to place wall")
+                PacketSender().send(e.player, Packet.Title(EnumTitleAction.ACTIONBAR, chatText("Not enough blocks!"), 1, 20, 1))
             }
         }
     }
