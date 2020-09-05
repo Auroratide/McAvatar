@@ -2,6 +2,7 @@ package mcavatar.earth
 
 import mcavatar.PacketSender
 import mcavatar.bukkit.block.perpendicular
+import mcavatar.bukkit.inventory.item
 import mcavatar.bukkit.material.axe
 import mcavatar.bukkit.material.has
 import mcavatar.bukkit.material.playSound
@@ -19,15 +20,13 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.inventory.ItemStack
 
-private typealias ItemInInventory = Map<Int, ItemStack>
-
 class StonewallListener : Listener {
     @EventHandler fun placeWall(e: BlockDamageEvent) {
         if (e.itemInHand.properties().has<axe>() && e.player.attackCooldown >= 0.9f) {
             val left = e.player.facing.perpendicular()
             val wall = wall(e.block, left)
 
-            val cobblestone: ItemInInventory = e.player.inventory.all(Material.COBBLESTONE)
+            val cobblestone = e.player.inventory.item(Material.COBBLESTONE)
 
             var allBlocksPlaced = true
             wall.forEach {
@@ -59,14 +58,5 @@ class StonewallListener : Listener {
         val uuur = uuu.getRelative(left.oppositeFace)
 
         return listOf(u, ul, ur, uu, uul, uur, uuu, uuul, uuur)
-    }
-
-    private fun ItemInInventory.count() =
-        values.sumBy { it.amount }
-
-    private fun ItemInInventory.removeOne() {
-        values.find { it.amount > 0 }?.let {
-            --it.amount
-        }
     }
 }
