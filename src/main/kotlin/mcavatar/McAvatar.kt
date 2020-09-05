@@ -1,7 +1,7 @@
 package mcavatar
 
 import mcavatar.earth.DigListener
-import mcavatar.earth.StonewallListener
+import mcavatar.earth.Stonewall
 import mcavatar.scheduler.Scheduler
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -10,7 +10,7 @@ class McAvatar : JavaPlugin() {
         logger.info("onEnable is called!")
         val scheduler = Scheduler(this, server.scheduler)
         val digListener = DigListener(scheduler)
-        val stonewallListener = StonewallListener()
+        val stonewallListener = Stonewall.Listener()
 
         server.pluginManager.registerEvents(digListener, this)
         server.pluginManager.registerEvents(stonewallListener, this)
