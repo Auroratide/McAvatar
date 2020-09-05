@@ -1,18 +1,16 @@
 package mcavatar.earth
 
 import mcavatar.*
-import mcavatar.material.*
+import mcavatar.bukkit.material.*
 import mcavatar.math.Ratio
 import mcavatar.minecraft.*
 import mcavatar.scheduler.*
-import org.bukkit.Bukkit
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDamageEvent
 import java.lang.Float.max
-import java.lang.Float.min
 
 class DigListener(private val scheduler: Scheduler) : Listener {
     private val breakTasks = mutableMapOf<Player, Task>()

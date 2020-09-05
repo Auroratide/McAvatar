@@ -1,11 +1,10 @@
 package mcavatar.earth
 
 import mcavatar.PacketSender
-import mcavatar.logger
-import mcavatar.material.axe
-import mcavatar.material.has
-import mcavatar.material.playSound
-import mcavatar.material.properties
+import mcavatar.bukkit.material.axe
+import mcavatar.bukkit.material.has
+import mcavatar.bukkit.material.playSound
+import mcavatar.bukkit.material.properties
 import mcavatar.minecraft.EnumTitleAction
 import mcavatar.minecraft.Packet
 import mcavatar.minecraft.Title

@@ -1,4 +1,4 @@
-package mcavatar.material
+package mcavatar.bukkit.material
 
 import mcavatar.logger
 import org.bukkit.Material
