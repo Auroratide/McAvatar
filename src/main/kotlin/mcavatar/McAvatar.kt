@@ -9,13 +9,13 @@ class McAvatar : JavaPlugin() {
     override fun onEnable() {
         logger.info("onEnable is called!")
         val scheduler = Scheduler(this, server.scheduler)
-        val digListener = Burrow.Listener(scheduler)
-        val stonewallListener = Stonewall.Listener()
+        val burrow = Burrow.Listener(scheduler)
+        val stonewall = Stonewall.Listener()
 
-        server.pluginManager.registerEvents(digListener, this)
-        server.pluginManager.registerEvents(stonewallListener, this)
+        server.pluginManager.registerEvents(burrow, this)
+        server.pluginManager.registerEvents(stonewall, this)
         server.pluginManager.registerEvents(PacketListener {
-            inbound(digListener::cancelDig)
+            inbound(burrow::cancelDig)
         }, this)
     }
 
