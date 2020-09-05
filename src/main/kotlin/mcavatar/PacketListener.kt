@@ -3,7 +3,7 @@ package mcavatar
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

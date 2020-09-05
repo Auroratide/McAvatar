@@ -1,9 +1,9 @@
 package mcavatar.minecraft
 
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer
 import org.bukkit.entity.Player
 
-typealias PacketPlayOutAnimation = net.minecraft.server.v1_16_R1.PacketPlayOutAnimation
+typealias PacketPlayOutAnimation = net.minecraft.server.v1_16_R2.PacketPlayOutAnimation
 enum class ClientAnimation(val value: Int) {
     SWING_MAIN_ARM(0),
     TAKE_DAMAGE(1),
