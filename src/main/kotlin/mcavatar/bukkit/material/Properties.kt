@@ -13,7 +13,7 @@ object hoe : tool
 object shovel : tool
 object sword : tool
 
-private val properties: Map<Material, List<MaterialProperty>> = mapOf(
+val properties: Map<Material, List<MaterialProperty>> = mapOf(
     Material.DIRT to listOf(earthy),
     Material.GRASS_BLOCK to listOf(earthy),
     Material.COARSE_DIRT to listOf(earthy),
@@ -144,3 +144,6 @@ private val properties: Map<Material, List<MaterialProperty>> = mapOf(
 fun Block.properties() = properties[type] ?: emptyList()
 fun ItemStack.properties() = properties[type] ?: emptyList()
 inline fun <reified T> List<MaterialProperty>.has() = find { it is T } != null
+inline fun <reified T> materialsWith() = properties.filter { entry ->
+    entry.value.find { it is T } != null
+}.keys
