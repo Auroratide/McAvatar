@@ -1,6 +1,6 @@
-package mcavatar.earth
+package mcavatar.abilities.earth
 
-import mcavatar.Ability
+import mcavatar.abilities.Ability
 import mcavatar.PacketSender
 import mcavatar.bukkit.block.perpendicular
 import mcavatar.bukkit.inventory.item

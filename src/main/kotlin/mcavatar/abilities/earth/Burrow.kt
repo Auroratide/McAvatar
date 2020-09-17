@@ -1,6 +1,7 @@
-package mcavatar.earth
+package mcavatar.abilities.earth
 
 import mcavatar.*
+import mcavatar.abilities.Ability
 import mcavatar.bukkit.block.showBreakage
 import mcavatar.bukkit.material.*
 import mcavatar.math.Ratio

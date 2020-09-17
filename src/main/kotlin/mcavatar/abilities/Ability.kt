@@ -1,9 +1,8 @@
-package mcavatar
+package mcavatar.abilities
 
 import mcavatar.bukkit.titles.actionBar
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
-import org.bukkit.event.player.PlayerEvent
 
 private typealias Condition = Pair<() -> Boolean, () -> Unit>
 private fun Condition.isMet() = first()

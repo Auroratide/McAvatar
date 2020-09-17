@@ -1,7 +1,7 @@
 package mcavatar
 
-import mcavatar.earth.Burrow
-import mcavatar.earth.Stonewall
+import mcavatar.abilities.earth.Burrow
+import mcavatar.abilities.earth.Stonewall
 import mcavatar.scheduler.Scheduler
 import org.bukkit.plugin.java.JavaPlugin
 
