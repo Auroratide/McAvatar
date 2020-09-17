@@ -2,6 +2,7 @@ package mcavatar.abilities.earth
 
 import mcavatar.abilities.Ability
 import mcavatar.PacketSender
+import mcavatar.bukkit.block.particlize
 import mcavatar.bukkit.block.perpendicular
 import mcavatar.bukkit.inventory.item
 import mcavatar.bukkit.material.*
@@ -69,10 +70,7 @@ class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event
     private fun cobblify(block: Block) {
         block.type = Material.COBBLESTONE
         block.playSound { placed }
-        repeat(10) {
-            val location = Location(block.world, block.location.x + Random.nextDouble(0.0, 1.0), block.location.y + Random.nextDouble(0.0, 1.0), block.location.z + Random.nextDouble(0.0, 1.0))
-            block.world.spawnParticle(Particle.BLOCK_DUST, location, 1, block.blockData)
-        }
+        block.particlize(10)
     }
 
     private fun wall(): List<Block> {
