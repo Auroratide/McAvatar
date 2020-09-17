@@ -1,10 +1,10 @@
 package mcavatar.earth
 
+import mcavatar.Ability
 import mcavatar.PacketSender
 import mcavatar.bukkit.block.perpendicular
 import mcavatar.bukkit.inventory.item
 import mcavatar.bukkit.material.*
-import mcavatar.bukkit.titles.actionBar
 import mcavatar.minecraft.Animation
 import mcavatar.minecraft.ClientAnimation
 import mcavatar.minecraft.Packet
@@ -14,7 +14,6 @@ import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
@@ -22,45 +21,49 @@ import org.bukkit.inventory.EquipmentSlot
 import java.time.Duration
 import kotlin.random.Random
 
-class Stonewall(private val player: Player, private val block: Block) {
-    private val left = player.facing.perpendicular()
-    private val cobblestone = player.inventory.item(Material.COBBLESTONE)
+class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event, event.player) {
+    private val block get() = event.clickedBlock!!
+    private val left = event.player.facing.perpendicular()
+    private val cobblestone = event.player.inventory.item(Material.COBBLESTONE)
 
-    fun execute() {
-        when {
-            block.getRelative(BlockFace.UP).type.isSolid ->
-                player.actionBar.warn("Must use on ground!")
-            cobblestone.count() == 0 ->
-                player.actionBar.warn("Not enough blocks!")
-            else -> {
-                wall().forEach {
-                    if (canCobblify(it)) {
-                        cobblify(it)
-                        cobblestone.removeOne()
-                    }
-                }
+    override fun preconditions() = with(event) {
+        trigger { hasBlock() && hasItem() }
+        trigger { action == Action.RIGHT_CLICK_BLOCK && hand == EquipmentSlot.HAND }
+        trigger { item!!.properties().has<axe>() }
+        trigger { player.getCooldown(item!!.type) <= 0 }
 
-                materialsWith<axe>().forEach {
-                    player.setCooldown(it, Duration.ofMillis(900).toTicks().toInt())
-                }
+        requirement("Must use on ground!") {
+            !block.getRelative(BlockFace.UP).type.isSolid
+        }
+
+        requirement("Not enough blocks!") {
+            cobblestone.count() > 0
+        }
+    }
+
+    override fun action() = with(event) {
+        PacketSender().send(player, Packet.Animation(player, ClientAnimation.SWING_MAIN_ARM))
+
+        wall().forEach {
+            if (canCobblify(it)) {
+                cobblify(it)
+                cobblestone.removeOne()
             }
+        }
+
+        materialsWith<axe>().forEach {
+            player.setCooldown(it, Duration.ofMillis(900).toTicks().toInt())
         }
     }
 
     class Listener : org.bukkit.event.Listener {
-        @EventHandler fun placeWall(e: PlayerInteractEvent) {
-            if (e.action == Action.RIGHT_CLICK_BLOCK && e.hasBlock() && e.hasItem() && e.hand == EquipmentSlot.HAND) {
-                if (e.item!!.properties().has<axe>() && e.player.getCooldown(e.item!!.type) <= 0) {
-                    PacketSender().send(e.player, Packet.Animation(e.player, ClientAnimation.SWING_MAIN_ARM))
-                    Stonewall(e.player, e.clickedBlock!!).execute()
-                }
-            }
-        }
+        @EventHandler fun placeWall(e: PlayerInteractEvent) =
+            Stonewall(e).execute()
     }
 
     private fun canCobblify(block: Block) =
         !block.type.isSolid &&
-        cobblestone.count() > 0
+            cobblestone.count() > 0
 
     private fun cobblify(block: Block) {
         block.type = Material.COBBLESTONE

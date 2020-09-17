@@ -6,18 +6,21 @@ import mcavatar.bukkit.material.*
 import mcavatar.math.Ratio
 import mcavatar.minecraft.*
 import mcavatar.scheduler.*
-import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDamageEvent
 import java.lang.Float.max
 
-class Burrow(private val scheduler: Scheduler, private val player: Player, private val block: Block) {
-    private val timeToBreak = 4.ticks * max(block.type.hardness, 0.75f)
-    lateinit var task: Task
+class Burrow(private val scheduler: Scheduler, event: BlockDamageEvent) : Ability<BlockDamageEvent>(event, event.player) {
+    private val timeToBreak = 4.ticks * max(event.block.type.hardness, 0.75f)
+    private var task: Task? = null
 
-    fun execute() {
+    override fun preconditions() = with(event) {
+        trigger { block.properties().has<earthy>() }
+        trigger { !itemInHand.properties().has<tool>() }
+    }
+
+    override fun action() = with(event) {
         task = scheduler.runAfter(timeToBreak) {
             block.playSound { broken }
             block.breakNaturally()
@@ -26,17 +29,13 @@ class Burrow(private val scheduler: Scheduler, private val player: Player, priva
         }
     }
 
-    fun cancel() = task.cancel()
+    fun cancel() = task?.cancel()
 
     class Listener(private val scheduler: Scheduler) : org.bukkit.event.Listener {
         private val burrowTasks = mutableMapOf<Player, Burrow>()
 
         @EventHandler fun start(e: BlockDamageEvent) {
-            if (e.block.properties().has<earthy>() && !e.itemInHand.properties().has<tool>()) {
-                burrowTasks[e.player] = Burrow(scheduler, e.player, e.block).also {
-                    it.execute()
-                }
-            }
+            burrowTasks[e.player] = Burrow(scheduler, e).also { it.execute() }
         }
 
         @PacketHandler fun cancelDig(packet: PacketPlayInBlockDig, player: Player) {
