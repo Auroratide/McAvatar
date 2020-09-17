@@ -34,7 +34,7 @@ class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event
         trigger { player.getCooldown(item!!.type) <= 0 }
 
         requirement("Must use on ground!") {
-            !block.getRelative(BlockFace.UP).type.isSolid
+            !block.getRelative(BlockFace.UP).type.isSolid || !block.type.isSolid
         }
 
         requirement("Not enough blocks!") {
@@ -76,7 +76,11 @@ class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event
     }
 
     private fun wall(): List<Block> {
-        val u = block.getRelative(BlockFace.UP)
+        val u = if (block.type.isSolid) {
+            block.getRelative(BlockFace.UP)
+        } else {
+            block // place ON the grass, not above it!
+        }
         val ul = u.getRelative(left)
         val ur = u.getRelative(left.oppositeFace)
         val uu = u.getRelative(BlockFace.UP)
