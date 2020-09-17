@@ -2,8 +2,10 @@ package mcavatar.abilities.earth
 
 import mcavatar.abilities.Ability
 import mcavatar.bukkit.block.center
+import mcavatar.bukkit.block.particlize
 import mcavatar.bukkit.material.axe
 import mcavatar.bukkit.material.has
+import mcavatar.bukkit.material.playSound
 import mcavatar.bukkit.material.properties
 import mcavatar.logger
 import mcavatar.scheduler.Scheduler
@@ -49,6 +51,8 @@ class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : A
             velocity = launchDirection.multiply(launch)
             setHurtEntities(false)
         }.also {
+            block.playSound { placed }
+            block.particlize(8)
             block.type = Material.AIR
         }
     }
