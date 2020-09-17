@@ -15,6 +15,9 @@ import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.inventory.ItemStack
 
 class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : Ability<BlockDamageEvent>(event, event.player) {
+    private val knockback = 2.0
+    private val launch = 1.25
+
     private val launchDirection = player.location.direction.normalize()
     private val world = player.world
     private lateinit var collisionTask: Task
@@ -27,8 +30,8 @@ class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : A
 
     override fun action(): Unit = with(event) {
         tossBoulder().onCollision { boulder, target ->
-            target.damage(8.0)
-            target.velocity = target.velocity.add(boulder.velocity)
+            target.damage(8.0, player)
+            target.velocity = target.velocity.add(boulder.velocity.multiply(knockback))
         }
     }
 
@@ -38,7 +41,7 @@ class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : A
 
     private fun tossBoulder() = with(event) {
         world.spawnFallingBlock(block.center.add(launchDirection.multiply(0.5)), block.blockData).apply {
-            velocity = launchDirection.multiply(1.25)
+            velocity = launchDirection.multiply(launch)
             setHurtEntities(false)
         }.also {
             block.type = Material.AIR
