@@ -35,6 +35,8 @@ class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : A
 
     override fun action(): Unit = with(event) {
         tossBoulder().onCollision { boulder, target ->
+            boulder.playSound { broken }
+            boulder.particlize(8)
             if (target !is HumanEntity || !target.isBlocking(boulder)) {
                 target.damage(8.0, player)
                 target.velocity = target.velocity.add(boulder.velocity.multiply(knockback))

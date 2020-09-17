@@ -4,6 +4,7 @@ import mcavatar.logger
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
+import org.bukkit.entity.FallingBlock
 
 // Future reference in case this gets out of hand:
 // https://www.spigotmc.org/threads/play-correct-break-sound-for-a-block-1-14.402215/
@@ -112,7 +113,7 @@ private val sounds: Map<Material, BlockSounds> = mapOf(
 )
 
 fun Block.playSound(getSound: BlockSounds.() -> Sound?) {
-    val sound = sounds().getSound()
+    val sound = type.sounds().getSound()
 
     if (sound != null) {
         world.playSound(location, sound, 1.0f, 0.75f)
@@ -121,4 +122,14 @@ fun Block.playSound(getSound: BlockSounds.() -> Sound?) {
     }
 }
 
-fun Block.sounds() = sounds[type] ?: BlockSounds(broken = null, placed = null)
+fun FallingBlock.playSound(getSound: BlockSounds.() -> Sound?) {
+    val sound = blockData.material.sounds().getSound()
+
+    if (sound != null) {
+        world.playSound(location, sound, 1.0f, 0.75f)
+    } else {
+        logger().warning("Attempted sound for $type, but no sounds were found. Actual block: $this")
+    }
+}
+
+fun Material.sounds() = sounds[this] ?: BlockSounds(broken = null, placed = null)
