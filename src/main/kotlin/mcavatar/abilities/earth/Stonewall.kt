@@ -29,6 +29,7 @@ class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event
     override fun preconditions() = with(event) {
         trigger { hasBlock() && hasItem() }
         trigger { action == Action.RIGHT_CLICK_BLOCK && hand == EquipmentSlot.HAND }
+        trigger { !block.type.isInteractable }
         trigger { item!!.properties().has<axe>() }
         trigger { player.getCooldown(item!!.type) <= 0 }
 
