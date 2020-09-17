@@ -9,3 +9,6 @@ import org.bukkit.entity.Player
 
 fun Block.showBreakage(ratio: Ratio, player: Player) =
     PacketSender().send(player, Packet.BlockBreakAnimation(player, this, ratio.numberInRange(0..9)))
+
+val Block.center get() =
+    location.add(0.5, 0.5, 0.5)
