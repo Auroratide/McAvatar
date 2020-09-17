@@ -34,7 +34,7 @@ class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event
         trigger { player.getCooldown(item!!.type) <= 0 }
 
         requirement("Must use on ground!") {
-            !block.getRelative(BlockFace.UP).type.isSolid || !block.type.isSolid
+            blockFace == BlockFace.UP || !block.type.isSolid
         }
 
         requirement("Not enough blocks!") {
