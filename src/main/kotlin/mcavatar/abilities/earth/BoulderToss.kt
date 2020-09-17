@@ -5,10 +5,12 @@ import mcavatar.bukkit.block.center
 import mcavatar.bukkit.material.axe
 import mcavatar.bukkit.material.has
 import mcavatar.bukkit.material.properties
+import mcavatar.logger
 import mcavatar.scheduler.Scheduler
 import mcavatar.scheduler.Task
 import org.bukkit.Material
 import org.bukkit.entity.FallingBlock
+import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockDamageEvent
@@ -17,6 +19,7 @@ import org.bukkit.inventory.ItemStack
 class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : Ability<BlockDamageEvent>(event, event.player) {
     private val knockback = 2.0
     private val launch = 1.25
+    private val shieldTolerance = 1.333
 
     private val launchDirection = player.location.direction.normalize()
     private val world = player.world
@@ -30,8 +33,10 @@ class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : A
 
     override fun action(): Unit = with(event) {
         tossBoulder().onCollision { boulder, target ->
-            target.damage(8.0, player)
-            target.velocity = target.velocity.add(boulder.velocity.multiply(knockback))
+            if (target !is HumanEntity || !target.isBlocking(boulder)) {
+                target.damage(8.0, player)
+                target.velocity = target.velocity.add(boulder.velocity.multiply(knockback))
+            }
         }
     }
 
@@ -58,6 +63,17 @@ class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : A
                     collisionTask.cancel()
                 }
             }
+        }
+    }
+
+    private fun HumanEntity.isBlocking(boulder: FallingBlock): Boolean {
+        return if (isBlocking) {
+            val boulderDirection = boulder.velocity.normalize()
+            val targetFacing = location.direction.normalize()
+
+            return boulderDirection.add(targetFacing).length() < shieldTolerance
+        } else {
+            false
         }
     }
 }
