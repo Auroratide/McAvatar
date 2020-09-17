@@ -1,5 +1,6 @@
 package mcavatar.scheduler
 
+import org.bukkit.entity.Entity
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitScheduler
 import java.time.Duration
@@ -20,5 +21,20 @@ class Scheduler(private val plugin: Plugin, private val scheduler: BukkitSchedul
         }
 
         return repeatingTask + futureCancelTask
+    }
+
+    fun onEachTickWhileAlive(entity: Entity, task: (tick: Int) -> Unit): Task {
+        val tick = AtomicInteger(0)
+
+        var repeatingTask: Task? = null
+        repeatingTask = RepeatingTask(scheduler, scheduler.scheduleSyncRepeatingTask(plugin, {
+            if (repeatingTask != null && entity.isDead) {
+                repeatingTask?.cancel()
+            } else {
+                task(tick.getAndIncrement())
+            }
+        }, 0, 1))
+
+        return repeatingTask
     }
 }

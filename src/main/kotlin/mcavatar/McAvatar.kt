@@ -13,7 +13,7 @@ class McAvatar : JavaPlugin() {
         val scheduler = Scheduler(this, server.scheduler)
         val burrow = Burrow.Listener(scheduler)
         val stonewall = Stonewall.Listener()
-        val boulderToss = BoulderToss.Listener()
+        val boulderToss = BoulderToss.Listener(scheduler)
 
         server.pluginManager.registerEvents(burrow, this)
         server.pluginManager.registerEvents(stonewall, this)
