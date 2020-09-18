@@ -12,6 +12,9 @@ permissions:
   mcavatar.abilities.earth:
     description: Allows earthbending
     default: false
+  mcavatar.abilities.fire:
+    description: Allows firebending
+    default: false
   mcavatar.cli.bending:
     description: Allows manipulation of players' bending abilities
     default: op
