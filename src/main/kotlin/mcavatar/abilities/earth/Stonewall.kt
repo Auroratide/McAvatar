@@ -22,7 +22,7 @@ import org.bukkit.inventory.EquipmentSlot
 import java.time.Duration
 import kotlin.random.Random
 
-class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event, event.player) {
+class Stonewall(private val event: PlayerInteractEvent) : Ability(event.player) {
     private val cooldown = Duration.ofMillis(1500)
 
     private val block get() = event.clickedBlock!!

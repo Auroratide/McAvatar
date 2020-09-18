@@ -12,7 +12,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockDamageEvent
 import java.lang.Float.max
 
-class Burrow(private val scheduler: Scheduler, event: BlockDamageEvent) : Ability<BlockDamageEvent>(event, event.player) {
+class Burrow(private val scheduler: Scheduler, private val event: BlockDamageEvent) : Ability(event.player) {
     private val timeToBreak = 4.ticks * max(event.block.type.hardness, 0.75f)
     private var task: Task? = null
 

@@ -8,7 +8,7 @@ private typealias Condition = Pair<() -> Boolean, () -> Unit>
 private fun Condition.isMet() = first()
 private fun Condition.onFailure() = second()
 
-abstract class Ability<T : Event>(protected val event: T, protected val player: Player) {
+abstract class Ability(protected val player: Player) {
     private val preconditions = mutableListOf<Condition>()
     protected abstract fun preconditions()
     protected abstract fun action()
