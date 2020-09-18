@@ -3,6 +3,7 @@ package mcavatar
 import mcavatar.abilities.earth.BoulderToss
 import mcavatar.abilities.earth.Burrow
 import mcavatar.abilities.earth.Stonewall
+import mcavatar.abilities.fire.Fireproof
 import mcavatar.scheduler.Scheduler
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -15,9 +16,12 @@ class McAvatar : JavaPlugin() {
         val stonewall = Stonewall.Listener()
         val boulderToss = BoulderToss.Listener(scheduler)
 
+        val fireproof = Fireproof.Listener()
+
         server.pluginManager.registerEvents(burrow, this)
         server.pluginManager.registerEvents(stonewall, this)
         server.pluginManager.registerEvents(boulderToss, this)
+        server.pluginManager.registerEvents(fireproof, this)
         server.pluginManager.registerEvents(PacketListener {
             inbound(burrow::cancelDig)
         }, this)
