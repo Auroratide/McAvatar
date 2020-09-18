@@ -23,6 +23,8 @@ import java.time.Duration
 import kotlin.random.Random
 
 class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event, event.player) {
+    private val cooldown = Duration.ofMillis(1500)
+
     private val block get() = event.clickedBlock!!
     private val left = event.player.facing.perpendicular()
     private val cobblestone = event.player.inventory.item(Material.COBBLESTONE)
@@ -54,7 +56,7 @@ class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event
         }
 
         materialsWith<axe>().forEach {
-            player.setCooldown(it, Duration.ofMillis(900).toTicks().toInt())
+            player.setCooldown(it, cooldown.toTicks().toInt())
         }
     }
 
