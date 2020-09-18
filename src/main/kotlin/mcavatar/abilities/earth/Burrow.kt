@@ -6,13 +6,14 @@ import mcavatar.bukkit.block.showBreakage
 import mcavatar.bukkit.material.*
 import mcavatar.math.Ratio
 import mcavatar.minecraft.*
+import mcavatar.permissions.Bending
 import mcavatar.scheduler.*
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockDamageEvent
 import java.lang.Float.max
 
-class Burrow(private val scheduler: Scheduler, private val event: BlockDamageEvent) : Ability(event.player) {
+class Burrow(private val scheduler: Scheduler, private val event: BlockDamageEvent) : Ability(event.player, Bending.earth) {
     private val timeToBreak = 4.ticks * max(event.block.type.hardness, 0.75f)
     private var task: Task? = null
 

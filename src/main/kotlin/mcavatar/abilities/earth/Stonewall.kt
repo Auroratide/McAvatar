@@ -9,6 +9,7 @@ import mcavatar.bukkit.material.*
 import mcavatar.minecraft.Animation
 import mcavatar.minecraft.ClientAnimation
 import mcavatar.minecraft.Packet
+import mcavatar.permissions.Bending
 import mcavatar.scheduler.toTicks
 import org.bukkit.Location
 import org.bukkit.Material
@@ -22,7 +23,7 @@ import org.bukkit.inventory.EquipmentSlot
 import java.time.Duration
 import kotlin.random.Random
 
-class Stonewall(private val event: PlayerInteractEvent) : Ability(event.player) {
+class Stonewall(private val event: PlayerInteractEvent) : Ability(event.player, Bending.earth) {
     private val cooldown = Duration.ofMillis(1500)
 
     private val block get() = event.clickedBlock!!
@@ -30,7 +31,6 @@ class Stonewall(private val event: PlayerInteractEvent) : Ability(event.player) 
     private val cobblestone = event.player.inventory.item(Material.COBBLESTONE)
 
     override fun preconditions() = with(event) {
-        trigger { player.hasPermission("mcavatar.abilities.earth") }
         trigger { hasBlock() && hasItem() }
         trigger { action == Action.RIGHT_CLICK_BLOCK && hand == EquipmentSlot.HAND }
         trigger { !block.type.isInteractable }

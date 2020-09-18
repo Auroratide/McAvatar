@@ -1,6 +1,8 @@
 package mcavatar.abilities
 
 import mcavatar.bukkit.titles.actionBar
+import mcavatar.permissions.Bending
+import mcavatar.permissions.hasBending
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 
@@ -8,13 +10,15 @@ private typealias Condition = Pair<() -> Boolean, () -> Unit>
 private fun Condition.isMet() = first()
 private fun Condition.onFailure() = second()
 
-abstract class Ability(protected val player: Player) {
+abstract class Ability(protected val player: Player, private val element: Bending) {
     private val preconditions = mutableListOf<Condition>()
     protected abstract fun preconditions()
     protected abstract fun action()
 
     fun execute() {
+        trigger { player.hasBending(element) }
         preconditions()
+
         val failedPrecondition = preconditions.find { !it.isMet() }
         if (failedPrecondition == null) {
             action()
