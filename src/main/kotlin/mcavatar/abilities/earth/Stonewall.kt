@@ -30,7 +30,7 @@ class Stonewall(event: PlayerInteractEvent) : Ability<PlayerInteractEvent>(event
     private val cobblestone = event.player.inventory.item(Material.COBBLESTONE)
 
     override fun preconditions() = with(event) {
-//        trigger { player.hasPermission("mcavatar.abilities.earth") }
+        trigger { player.hasPermission("mcavatar.abilities.earth") }
         trigger { hasBlock() && hasItem() }
         trigger { action == Action.RIGHT_CLICK_BLOCK && hand == EquipmentSlot.HAND }
         trigger { !block.type.isInteractable }

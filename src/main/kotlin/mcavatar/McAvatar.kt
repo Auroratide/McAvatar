@@ -4,7 +4,8 @@ import mcavatar.abilities.earth.BoulderToss
 import mcavatar.abilities.earth.Burrow
 import mcavatar.abilities.earth.Stonewall
 import mcavatar.abilities.fire.Fireproof
-import mcavatar.commands.Bending
+import mcavatar.permissions.BendingManager
+import mcavatar.permissions.Permissions
 import mcavatar.scheduler.Scheduler
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -13,6 +14,8 @@ class McAvatar : JavaPlugin() {
         logger.info("McAvatar enabled")
 
         val scheduler = Scheduler(this, server.scheduler)
+        val permissions = Permissions(this)
+
         val burrow = Burrow.Listener(scheduler)
         val stonewall = Stonewall.Listener()
         val boulderToss = BoulderToss.Listener(scheduler)
@@ -23,8 +26,9 @@ class McAvatar : JavaPlugin() {
         server.pluginManager.registerEvents(stonewall, this)
         server.pluginManager.registerEvents(boulderToss, this)
         server.pluginManager.registerEvents(fireproof, this)
+        server.pluginManager.registerEvents(permissions, this)
 
-        getCommand(Bending.command)?.setExecutor(Bending(this)) ?: error("Failed to find ${Bending.command}")
+        getCommand(BendingManager.command)?.setExecutor(BendingManager(permissions)) ?: error("Failed to find ${BendingManager.command}")
 
         server.pluginManager.registerEvents(PacketListener {
             inbound(burrow::cancelDig)
