@@ -3,6 +3,7 @@ package mcavatar.abilities.earth
 import mcavatar.abilities.Ability
 import mcavatar.bukkit.block.center
 import mcavatar.bukkit.block.particlize
+import mcavatar.bukkit.entity.playSound
 import mcavatar.bukkit.material.axe
 import mcavatar.bukkit.material.has
 import mcavatar.bukkit.material.playSound
@@ -35,11 +36,13 @@ class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : A
 
     override fun action(): Unit = with(event) {
         tossBoulder().onCollision { boulder, target ->
-            boulder.playSound { broken }
             boulder.particlize(8)
             if (target !is HumanEntity || !target.isBlocking(boulder)) {
+                boulder.playSound { broken }
                 target.damage(8.0, player)
                 target.velocity = target.velocity.add(boulder.velocity.multiply(knockback))
+            } else {
+                target.playSound { shielding }
             }
         }
     }
