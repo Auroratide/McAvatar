@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack
 class BoulderToss(private val scheduler: Scheduler, event: BlockDamageEvent) : Ability<BlockDamageEvent>(event, event.player) {
     private val knockback = 2.0
     private val launch = 1.25
-    private val shieldTolerance = 1.333
+    private val shieldTolerance = 1.333 // sqrt(2) is 180 degrees of tolerance
 
     private val launchDirection = player.location.direction.normalize()
     private val world = player.world
