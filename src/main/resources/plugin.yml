@@ -2,3 +2,16 @@ name: McAvatar
 version: 0.1
 main: mcavatar.McAvatar
 api-version: 1.16
+commands:
+  bending:
+    description: View stuff
+    usage: "Usage: /<command> [view | assign | revoke] <player>"
+    permission: mcavatar.cli.bending
+    permission-message: "You cannot use this command"
+permissions:
+  mcavatar.abilities.earth:
+    description: Allows earthbending
+    default: false
+  mcavatar.cli.bending:
+    description: Allows manipulation of players' bending abilities
+    default: op
