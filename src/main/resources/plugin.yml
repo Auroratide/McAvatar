@@ -5,7 +5,7 @@ api-version: 1.16
 commands:
   bending:
     description: View stuff
-    usage: "Usage: /<command> [view | assign | revoke] <player>"
+    usage: "Usage: /<command> <view | assign | revoke> <player> [earth | fire | water | air]"
     permission: mcavatar.cli.bending
     permission-message: "You cannot use this command"
 permissions:

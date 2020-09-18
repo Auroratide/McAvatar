@@ -1,7 +1,7 @@
 package mcavatar.permissions
 
 enum class Bending {
-    earth, fire, water, air;
+    Earth, Fire, Water, Air;
 
-    val permission = Permission("abilities", name)
+    val permission = Permission("abilities", name.toLowerCase())
 }

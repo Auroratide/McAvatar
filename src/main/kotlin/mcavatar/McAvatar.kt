@@ -4,7 +4,7 @@ import mcavatar.abilities.earth.BoulderToss
 import mcavatar.abilities.earth.Burrow
 import mcavatar.abilities.earth.Stonewall
 import mcavatar.abilities.fire.Fireproof
-import mcavatar.permissions.BendingManager
+import mcavatar.permissions.AlterBending
 import mcavatar.permissions.Permissions
 import mcavatar.scheduler.Scheduler
 import org.bukkit.plugin.java.JavaPlugin
@@ -28,7 +28,7 @@ class McAvatar : JavaPlugin() {
         server.pluginManager.registerEvents(fireproof, this)
         server.pluginManager.registerEvents(permissions, this)
 
-        getCommand(BendingManager.command)?.setExecutor(BendingManager(permissions)) ?: error("Failed to find ${BendingManager.command}")
+        getCommand(AlterBending.command)?.setExecutor(AlterBending.Executor(permissions)) ?: error("Failed to find ${AlterBending.command}")
 
         server.pluginManager.registerEvents(PacketListener {
             inbound(burrow::cancelDig)

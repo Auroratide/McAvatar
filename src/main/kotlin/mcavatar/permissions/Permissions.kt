@@ -34,10 +34,10 @@ class Permissions(private val plugin: Plugin) : Listener {
             }
 
     object Abilities {
-        val earth = Bending.earth.permission
-        val fire = Bending.fire.permission
-        val water = Bending.water.permission
-        val air = Bending.air.permission
+        val earth = Bending.Earth.permission
+        val fire = Bending.Fire.permission
+        val water = Bending.Water.permission
+        val air = Bending.Air.permission
     }
 
     object Cli {

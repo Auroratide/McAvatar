@@ -11,9 +11,7 @@ import mcavatar.minecraft.ClientAnimation
 import mcavatar.minecraft.Packet
 import mcavatar.permissions.Bending
 import mcavatar.scheduler.toTicks
-import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.Particle
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.event.EventHandler
@@ -21,9 +19,8 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import java.time.Duration
-import kotlin.random.Random
 
-class Stonewall(private val event: PlayerInteractEvent) : Ability(event.player, Bending.earth) {
+class Stonewall(private val event: PlayerInteractEvent) : Ability(event.player, Bending.Earth) {
     private val cooldown = Duration.ofMillis(1500)
 
     private val block get() = event.clickedBlock!!
