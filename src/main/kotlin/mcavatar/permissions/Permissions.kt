@@ -25,6 +25,14 @@ class Permissions(private val plugin: Plugin) : Listener {
         PermissionModifier(player, attachments[player.uniqueId]!!).use(config)
     }
 
+    fun get(player: Player) =
+        player.effectivePermissions
+            .filter { it.value }
+            .map { it.permission }
+            .mapNotNull { raw ->
+                permissions.find { raw == it.qualifiedName }
+            }
+
     object Abilities {
         val earth = Bending.earth.permission
         val fire = Bending.fire.permission
@@ -35,6 +43,8 @@ class Permissions(private val plugin: Plugin) : Listener {
     object Cli {
         val bending = Permission("cli", "bending")
     }
+
+    val permissions = listOf(Abilities.earth, Abilities.fire, Abilities.water, Abilities.air, Cli.bending)
 
     @EventHandler fun onPlayerJoin(e: PlayerJoinEvent) = with(e) {
         if (attachments.containsKey(player.uniqueId)) {
