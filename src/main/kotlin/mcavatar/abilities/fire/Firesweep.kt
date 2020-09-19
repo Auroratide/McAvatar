@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.util.BoundingBox
 import java.time.Duration
 import kotlin.math.abs
 import kotlin.math.floor
@@ -25,10 +26,16 @@ import kotlin.random.Random
 class Firesweep(private val event: PlayerInteractEvent) : Ability(event.player, Bending.Fire) {
     private val cooldown = Duration.ofMillis(1500)
     private val igniteChance = Percent(40.0)
+    private val igniteDuration = Duration.ofMillis(4000)
 
     private val front = player.facing
     private val left = front.perpendicular()
     private val right = left.oppositeFace
+    private val areaOfEffect =
+        BoundingBox.of(
+            player.location.block.getRelative(front, 6).getRelative(left, 2),
+            player.location.block.getRelative(front, 2).getRelative(right, 2)
+        )
 
     override fun preconditions() = with(event) {
         trigger { hasItem() }
@@ -46,6 +53,13 @@ class Firesweep(private val event: PlayerInteractEvent) : Ability(event.player, 
         cone().forEach {
             if (it.type == Material.AIR && igniteChance.random())
                 it.type = Material.FIRE
+        }
+
+        player.world.livingEntities.forEach {
+            if (areaOfEffect.overlaps(it.boundingBox)) {
+                it.damage(2.0, player)
+                it.fireTicks = igniteDuration.toTicks().toInt()
+            }
         }
 
         player.setCooldown(item!!.type, cooldown.toTicks().toInt())
