@@ -20,7 +20,7 @@ class McAvatar : JavaPlugin() {
         val stonewall = Stonewall.Listener()
         val boulderToss = BoulderToss.Listener(scheduler)
 
-        val fireproof = Fireproof.Listener()
+        val fireproof = Fireproof.Listener(scheduler)
 
         server.pluginManager.registerEvents(burrow, this)
         server.pluginManager.registerEvents(stonewall, this)
