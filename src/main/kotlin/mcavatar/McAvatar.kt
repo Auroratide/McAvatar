@@ -4,6 +4,7 @@ import mcavatar.abilities.earth.BoulderToss
 import mcavatar.abilities.earth.Burrow
 import mcavatar.abilities.earth.Stonewall
 import mcavatar.abilities.fire.Fireproof
+import mcavatar.abilities.fire.Firesweep
 import mcavatar.permissions.AlterBending
 import mcavatar.permissions.Permissions
 import mcavatar.scheduler.Scheduler
@@ -21,11 +22,15 @@ class McAvatar : JavaPlugin() {
         val boulderToss = BoulderToss.Listener(scheduler)
 
         val fireproof = Fireproof.Listener(scheduler)
+        val firesweep = Firesweep.Listener()
 
         server.pluginManager.registerEvents(burrow, this)
         server.pluginManager.registerEvents(stonewall, this)
         server.pluginManager.registerEvents(boulderToss, this)
+
         server.pluginManager.registerEvents(fireproof, this)
+        server.pluginManager.registerEvents(firesweep, this)
+
         server.pluginManager.registerEvents(permissions, this)
 
         getCommand(AlterBending.command)?.setExecutor(AlterBending.Executor(permissions)) ?: error("Failed to find ${AlterBending.command}")
