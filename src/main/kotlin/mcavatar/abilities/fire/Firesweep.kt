@@ -62,6 +62,7 @@ class Firesweep(private val event: PlayerInteractEvent) : Ability(event.player, 
             }
         }
 
+        --item!!.amount
         player.setCooldown(item!!.type, cooldown.toTicks().toInt())
     }
 
