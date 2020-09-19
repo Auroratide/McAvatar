@@ -3,6 +3,7 @@ package mcavatar.abilities.fire
 import mcavatar.PacketSender
 import mcavatar.abilities.Ability
 import mcavatar.bukkit.block.perpendicular
+import mcavatar.math.Percent
 import mcavatar.minecraft.Animation
 import mcavatar.minecraft.ClientAnimation
 import mcavatar.minecraft.Packet
@@ -23,6 +24,7 @@ import kotlin.random.Random
 
 class Firesweep(private val event: PlayerInteractEvent) : Ability(event.player, Bending.Fire) {
     private val cooldown = Duration.ofMillis(1500)
+    private val igniteChance = Percent(40.0)
 
     private val front = player.facing
     private val left = front.perpendicular()
@@ -42,7 +44,7 @@ class Firesweep(private val event: PlayerInteractEvent) : Ability(event.player, 
 
         player.sendMessage("You used firesweep")
         cone().forEach {
-            if (it.type == Material.AIR && Random.nextBoolean())
+            if (it.type == Material.AIR && igniteChance.random())
                 it.type = Material.FIRE
         }
 
