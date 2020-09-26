@@ -1,5 +1,6 @@
 package mcavatar
 
+import mcavatar.abilities.air.Windwalker
 import mcavatar.abilities.earth.BoulderToss
 import mcavatar.abilities.earth.Burrow
 import mcavatar.abilities.earth.Stonewall
@@ -24,12 +25,16 @@ class McAvatar : JavaPlugin() {
         val fireproof = Fireproof.Listener(scheduler)
         val firesweep = Firesweep.Listener()
 
+        val windwalker = Windwalker.Listener()
+
         server.pluginManager.registerEvents(burrow, this)
         server.pluginManager.registerEvents(stonewall, this)
         server.pluginManager.registerEvents(boulderToss, this)
 
         server.pluginManager.registerEvents(fireproof, this)
         server.pluginManager.registerEvents(firesweep, this)
+
+        server.pluginManager.registerEvents(windwalker, this)
 
         server.pluginManager.registerEvents(permissions, this)
 
