@@ -9,8 +9,10 @@ import mcavatar.bukkit.material.hoe
 import mcavatar.bukkit.material.properties
 import mcavatar.logger
 import mcavatar.permissions.Bending
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.EquipmentSlot
@@ -46,7 +48,25 @@ class Windwalker(private val event: PlayerInteractEvent, private val previousUse
             if (uses.containsKey(e.player.uniqueId) && e.player located onGround)
                 uses.remove(e.player.uniqueId)
         }
+
+        @EventHandler fun onDamage(e: EntityDamageEvent) {
+            val entity = e.entity
+            if (entity is Player)
+                FallDamageReduction(entity, e).execute()
+        }
     }
 
     private fun usedAtMostTwice() = previousUse?.previousUse == null
+
+    private class FallDamageReduction(player: Player, private val event: EntityDamageEvent) : Ability(player, Bending.Air) {
+        override fun preconditions() = with(event) {
+            trigger { cause == EntityDamageEvent.DamageCause.FALL }
+        }
+
+        override fun action() = with(event) {
+            damage = 0.75 * damage - 3.0
+            if (damage <= 0)
+                isCancelled = true
+        }
+    }
 }
