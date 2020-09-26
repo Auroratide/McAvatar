@@ -15,15 +15,17 @@ abstract class Ability(protected val player: Player, private val element: Bendin
     protected abstract fun preconditions()
     protected abstract fun action()
 
-    fun execute() {
+    fun execute(): Boolean {
         trigger { player.hasBending(element) }
         preconditions()
 
         val failedPrecondition = preconditions.find { !it.isMet() }
-        if (failedPrecondition == null) {
+        return if (failedPrecondition == null) {
             action()
+            true
         } else {
             failedPrecondition.onFailure()
+            false
         }
     }
 
