@@ -1,9 +1,13 @@
 package mcavatar.abilities.air
 
 import mcavatar.abilities.Ability
+import mcavatar.bukkit.entity.inAir
+import mcavatar.bukkit.entity.located
+import mcavatar.bukkit.entity.onGround
 import mcavatar.bukkit.material.has
 import mcavatar.bukkit.material.hoe
 import mcavatar.bukkit.material.properties
+import mcavatar.logger
 import mcavatar.permissions.Bending
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
@@ -18,7 +22,7 @@ class Windwalker(private val event: PlayerInteractEvent, private val previousUse
         trigger { action in listOf(Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR) }
         trigger { hand == EquipmentSlot.HAND }
         trigger { !hasBlock() || !(clickedBlock?.type?.isInteractable ?: false) }
-        trigger { !player.isOnGround } // TODO do not rely on client-reporting field
+        trigger { player located inAir }
 
         requirement("Can only use twice before landing!") {
             usedAtMostTwice()
@@ -39,7 +43,7 @@ class Windwalker(private val event: PlayerInteractEvent, private val previousUse
         }
 
         @EventHandler fun onVelocity(e: PlayerMoveEvent) {
-            if (uses.containsKey(e.player.uniqueId) && e.player.isOnGround)
+            if (uses.containsKey(e.player.uniqueId) && e.player located onGround)
                 uses.remove(e.player.uniqueId)
         }
     }
