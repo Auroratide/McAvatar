@@ -33,6 +33,7 @@ class Windwalker(private val event: PlayerInteractEvent, private val previousUse
 
     override fun action() {
         player.velocity = player.location.direction.normalize()
+        player.fallDistance = 0.0f
     }
 
     class Listener : org.bukkit.event.Listener {
