@@ -11,6 +11,9 @@ operator fun Vector.minus(other: Vector) =
 infix fun Vector.scaleBy(factor: Int) =
     clone().multiply(factor)
 
+infix fun Vector.scaleBy(factor: Double) =
+    clone().multiply(factor)
+
 fun Vector.negate() =
     clone() scaleBy -1
 
