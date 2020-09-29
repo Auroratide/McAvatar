@@ -1,6 +1,8 @@
 package mcavatar.abilities.air
 
 import mcavatar.abilities.Ability
+import mcavatar.bukkit.entity.located
+import mcavatar.bukkit.entity.onGround
 import mcavatar.bukkit.material.has
 import mcavatar.bukkit.material.hoe
 import mcavatar.bukkit.material.properties
@@ -15,10 +17,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.util.Vector
 import kotlin.math.cos
 import kotlin.math.sin
 
 class Windwall(private val scheduler: Scheduler, private val event: PlayerInteractEvent) : Ability(event.player, Bending.Air) {
+    private val effectDistance = 4
+    private val pushForce = 0.25
+
     private val world = player.world
 
     override fun preconditions() = with(event) {
@@ -26,13 +32,16 @@ class Windwall(private val scheduler: Scheduler, private val event: PlayerIntera
         trigger { action in listOf(Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR) }
         trigger { hand == EquipmentSlot.HAND }
         trigger { !hasBlock() || !(clickedBlock?.type?.isInteractable ?: false) }
+        trigger { player located onGround }
     }
 
     override fun action(): Unit = with(event) {
         scheduler.onEachTickFor(4.ticks) {
+            particles()
+
             world.livingEntities.forEach {
-                if (it != player && it.location.distance(player.location) <= 4) {
-                    it.velocity += (it.location.toVector() - player.location.toVector()).normalize() scaleBy 0.25
+                if (it != player && it.location.distance(player.location) <= effectDistance) {
+                    it.velocity += (it.location.toVector() - player.location.toVector()).normalize() scaleBy pushForce
                 }
             }
         }
@@ -45,11 +54,14 @@ class Windwall(private val scheduler: Scheduler, private val event: PlayerIntera
     }
 
     private fun particles() {
-        for (i in 1..5) {
-            val t = Math.PI / i
-            for (j in 1..10) {
-                val p = 2 * Math.PI / j
-                world.spawnParticle(Particle.CLOUD, player.location, 1, sin(t) * cos(p), sin(t) * sin(p), cos(t))
+        // TODO just the front hemisphere of the sphere
+        val r = 3.25
+        for (i in 0..9) {
+            val t = Math.PI / 10 * i
+            for (j in 0..19) {
+                val p = 2 * Math.PI / 20 * j
+                val location = player.location.toVector() + Vector(r * sin(t) * cos(p), r * sin(t) * sin(p), r * cos(t))
+                world.spawnParticle(Particle.CLOUD, location.toLocation(world), 1, 0.0, 0.0, 0.0, 0.1)
             }
         }
     }
