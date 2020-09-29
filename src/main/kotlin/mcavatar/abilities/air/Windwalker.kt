@@ -7,8 +7,8 @@ import mcavatar.bukkit.entity.onGround
 import mcavatar.bukkit.material.has
 import mcavatar.bukkit.material.hoe
 import mcavatar.bukkit.material.properties
-import mcavatar.logger
 import mcavatar.permissions.Bending
+import org.bukkit.Particle
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
@@ -34,6 +34,7 @@ class Windwalker(private val event: PlayerInteractEvent, private val previousUse
     override fun action() {
         player.velocity = player.location.direction.normalize()
         player.fallDistance = 0.0f
+        player.spawnParticle(Particle.CLOUD, player.location, 12)
     }
 
     class Listener : org.bukkit.event.Listener {
