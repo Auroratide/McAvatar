@@ -23,7 +23,7 @@ import kotlin.math.sin
 
 class Windwall(private val scheduler: Scheduler, private val event: PlayerInteractEvent) : Ability(event.player, Bending.Air) {
     private val effectDistance = 4
-    private val pushForce = 0.25
+    private val pushForce = 0.075
 
     private val world = player.world
 
@@ -37,7 +37,7 @@ class Windwall(private val scheduler: Scheduler, private val event: PlayerIntera
 
     override fun action(): Unit = with(event) {
         scheduler.onEachTickFor(4.ticks) {
-            particles()
+//            particles()
 
             world.livingEntities.forEach {
                 if (it != player && it.location.distance(player.location) <= effectDistance) {
