@@ -3,7 +3,10 @@ package mcavatar
 import io.netty.channel.ChannelDuplexHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer
+import mcavatar.bukkit.channel
+import mcavatar.bukkit.handle
+import mcavatar.bukkit.networkManager
+import mcavatar.bukkit.playerConnection
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -19,7 +22,7 @@ class PacketListener(config: Interceptors.() -> Unit) : Listener {
     }
 
     @EventHandler fun onJoin(e: PlayerJoinEvent) {
-        val pipeline = (e.player as CraftPlayer).handle.playerConnection.networkManager.channel.pipeline()
+        val pipeline = e.player.handle.playerConnection.networkManager.channel.pipeline()
         pipeline.addBefore("packet_handler", e.player.name, object : ChannelDuplexHandler() {
             override fun channelRead(context: ChannelHandlerContext, packet: Any) {
                 inbound.forEach { packet.it(e.player) }
@@ -34,7 +37,7 @@ class PacketListener(config: Interceptors.() -> Unit) : Listener {
     }
 
     @EventHandler fun onLeave(e: PlayerQuitEvent) {
-        val channel = (e.player as CraftPlayer).handle.playerConnection.networkManager.channel
+        val channel = e.player.handle.playerConnection.networkManager.channel
         channel.eventLoop().submit {
             channel.pipeline().remove(e.player.name)
         }

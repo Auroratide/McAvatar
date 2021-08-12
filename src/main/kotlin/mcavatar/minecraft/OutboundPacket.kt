@@ -1,6 +1,6 @@
 package mcavatar.minecraft
 
-import net.minecraft.server.v1_16_R2.Packet
-import net.minecraft.server.v1_16_R2.PacketListenerPlayOut
+import net.minecraft.network.protocol.game.PacketListenerPlayOut
+import net.minecraft.network.protocol.Packet
 
 typealias OutboundPacket = Packet<PacketListenerPlayOut>

@@ -41,7 +41,7 @@ class Burrow(private val scheduler: Scheduler, private val event: BlockDamageEve
         }
 
         @PacketHandler fun cancelDig(packet: PacketPlayInBlockDig, player: Player) {
-            if (packet.digType() == EnumPlayerDigType.ABORT_DESTROY_BLOCK) {
+            if (packet.digType() == EnumPlayerDigType.CancelledDigging) {
                 burrowTasks[player]?.cancel()
             }
         }

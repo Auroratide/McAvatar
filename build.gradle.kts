@@ -4,16 +4,16 @@ import org.bukkit.buildtools.BuildToolsPlugin
 import org.bukkit.buildtools.buildTools
 
 plugins {
-    id("com.github.johnrengelman.shadow").version("6.0.0")
+    id("com.github.johnrengelman.shadow").version("7.0.0")
     java
-    kotlin("jvm") version "1.4.0"
+    kotlin("jvm") version "1.5.21"
     idea
 }
 
 apply<BuildToolsPlugin>()
 
 buildTools {
-    minecraftVersion = "1.16.2"
+    minecraftVersion = "1.17.1"
 }
 
 group = "com.auroratide"
