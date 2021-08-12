@@ -3,6 +3,11 @@
 Under construction.
 
 ```
-# Requires a built spigot server in the spigot folder
-./gradlew run
+# Download Spigot
+./gradlew spigotBuild
+
+# Run the Server
+./gradlew spigotRun
 ```
+
+If running for the first time, you may need to accept the EULA.
