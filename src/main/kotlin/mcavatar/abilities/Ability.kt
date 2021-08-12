@@ -30,12 +30,12 @@ abstract class Ability(protected val player: Player, private val element: Bendin
     }
 
     protected fun trigger(predicate: () -> Boolean) {
-        preconditions.add(Pair(predicate, {}))
+        preconditions.add(Pair(predicate) {})
     }
 
     protected fun requirement(warning: String, predicate: () -> Boolean) {
-        preconditions.add(Pair(predicate, {
+        preconditions.add(Pair(predicate) {
             player.actionBar.warn(warning)
-        }))
+        })
     }
 }
